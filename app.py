@@ -6,9 +6,9 @@ import logging
 app = Flask(__name__)
 CORS(app)
 
-logging.basicConfig(level=logging.INFO) #Add logging
+logging.basicConfig(level=logging.INFO)
 
-@app.route('/ticker/<ticker>')
+@app.route('/ticker/<ticker>') # <--- Make sure this is present and correct
 def get_ticker_data(ticker):
     try:
         data = yf.download(ticker, period="1d", interval="1m")
@@ -17,7 +17,7 @@ def get_ticker_data(ticker):
         data = data.reset_index()
         data['Datetime'] = data['Datetime'].astype(str)
         data_json = data.to_json(orient="records")
-        logging.info(f"Response for {ticker}: {data_json}") #Log the response.
+        logging.info(f"Response for {ticker}: {data_json}")
         return jsonify({"data": data_json})
     except Exception as e:
         logging.error(f"Error for {ticker}: {e}")
