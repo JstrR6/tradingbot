@@ -33,7 +33,10 @@ tickerSearch.addEventListener("input", (e) => {
 
 async function fetchTickerData(ticker) {
     try {
-        const response = await fetch(`/ticker/${ticker}`);
+        //Ensure the URL is correct for local or deployed environments
+        const backendURL = `/ticker/${ticker}`; // For local development.
+        // If deployed to render, use the full url. IE: const backendURL = "https://your-render-backend.onrender.com/ticker/" + ticker;
+        const response = await fetch(backendURL);
         const data = await response.json();
         if (data.error) {
             tickerData.innerHTML = `<p>${data.error}</p>`;
