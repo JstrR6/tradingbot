@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, request
 import yfinance as yf
 from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
-CORS(app) #Enable CORS for all routes
+CORS(app)
+
+logging.basicConfig(level=logging.INFO) #Add logging
 
 @app.route('/ticker/<ticker>')
 def get_ticker_data(ticker):
@@ -14,8 +17,10 @@ def get_ticker_data(ticker):
         data = data.reset_index()
         data['Datetime'] = data['Datetime'].astype(str)
         data_json = data.to_json(orient="records")
+        logging.info(f"Response for {ticker}: {data_json}") #Log the response.
         return jsonify({"data": data_json})
     except Exception as e:
+        logging.error(f"Error for {ticker}: {e}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
